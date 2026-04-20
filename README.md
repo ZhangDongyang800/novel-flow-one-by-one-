@@ -76,6 +76,9 @@ novel-flow/
 **Q: The generated text still has an "AI flavor".**
 A: This is normal. AI models have inherent writing patterns. The skill system significantly reduces AI-isms through rules and self-checks, but can't eliminate them 100%. When you spot AI-isms, point them out — the review skill will catch and fix them.
 
+**Q: The workflow got interrupted. What do I do?**
+A: Just invoke the `novel-orchestrator` skill. It will check your current state and figure out the next step.
+
 ## License
 
 [MIT](LICENSE)

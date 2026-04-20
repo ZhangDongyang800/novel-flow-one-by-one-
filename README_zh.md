@@ -76,6 +76,9 @@ novel-flow/
 **Q：生成的文字还是有 AI 味。**
 A：正常。AI 模型有固有的写作习惯，skill 系统通过规则和自检大幅减少 AI 味，但无法 100% 消除。发现 AI 味时直接指出来，审查 skill 会捕捉并修正。
 
+**Q：流程中断了怎么办？**
+A：直接调用 `novel-orchestrator` 技能，它会帮你确认当前状态并找到下一步的方向。
+
 ## License
 
 [MIT](LICENSE)
