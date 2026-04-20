@@ -1,7 +1,7 @@
 ---
 name: novel-review
 description: |
-  审查当前章节。三层闸门：硬门槛 → 升级感检查 → 判定。
+  审查当前章节。四层闸门：读者视角重读 → 禁用词兜底 → Canon检查 → 升级感检查。
   小修最多 1 轮，重写最多 1 次。
 ---
 
@@ -9,14 +9,13 @@ description: |
 
 审查当前章节，决定通过/小修/重写/reject。
 
-**核心原则：只审 guide.md 自检覆盖不到的问题，不做重复劳动。**
+**职责边界：guide.md 管"怎么写"，review 管"写得怎么样"。**
 
-guide.md 的"读者视角重读"已经覆盖了：结尾质量、句式重复、伪文学腔、节奏拖沓、情绪平坦、无记忆点。review 不再重复检查这些。
-
-review 只负责 guide.md **无法覆盖**的三件事：
-1. **Canon 一致性**——draft 是否引入了未记录的新设定、是否与已有设定冲突
-2. **升级感**——和前几章相比，冲突有没有升级、有没有揭示新信息
-3. **用户确认闸门**——确保用户看过每章产出，错误不会无声扩散
+review 是唯一的质量闸门。guide.md 定义了写作规则，但 AI 不一定遵守。review 的职责是：
+1. **读者视角重读**——以读者身份检查：有没有废话？有没有重复？有没有走神？
+2. **禁用词兜底**——guide.md 的禁用词表和排版规则，AI 写的时候可能漏掉
+3. **Canon 一致性**——新设定必须记录，冲突必须消除
+4. **升级感检查**——和前几章相比，冲突有没有升级、有没有揭示新信息
 
 <HARD-GATE>
 Do NOT review without reading: 章节/chapter-xxx.md（目标）+ 正文 + project.md（风格）+ outline.md（任务）。
@@ -27,11 +26,13 @@ Do NOT review without reading: 章节/chapter-xxx.md（目标）+ 正文 + proje
 ## Checklist
 
 1. **Read files** — chapter file + prose + project.md + outline.md
-2. **Canon check** — new settings? conflicts with existing canon?
-3. **Escalation check** — conflict escalation vs previous chapters? new info revealed?
-4. **Verdict** — pass / minor-fix / rewrite / reject
-5. **Write feedback** — write to chapter file, present to user
-6. **Delivery** — invoke novel-update after user confirmation
+2. **Reader perspective** — read as a reader: filler? repetition? boring?
+3. **Banned-word scan** — 7.1 禁用词 + 7.4 伪文学腔 + 7.2 句式重复
+4. **Canon check** — new settings? conflicts with existing canon?
+5. **Escalation check** — conflict escalation vs previous chapters? new info revealed?
+6. **Verdict** — pass / minor-fix / rewrite / reject
+7. **Write feedback** — write to chapter file, present to user
+8. **Delivery** — invoke novel-update after user confirmation
 
 ---
 
@@ -45,26 +46,32 @@ digraph review {
 
     start [label="触发 review", fillcolor="#d5f5e3"];
     read [label="Step 1: 读取文件", fillcolor="#eaf2f8"];
-    canon [label="Step 2: Canon检查", fillcolor="#fadbd8"];
-    escalation [label="Step 3: 升级感检查", fillcolor="#eaf2f8"];
-    judge [label="Step 4: 判定", fillcolor="#fef9e7"];
+    reader [label="Step 2: 读者视角重读", fillcolor="#eaf2f8"];
+    banned [label="Step 3: 禁用词兜底", fillcolor="#fadbd8"];
+    canon [label="Step 4: Canon检查", fillcolor="#fadbd8"];
+    escalation [label="Step 5: 升级感检查", fillcolor="#eaf2f8"];
+    judge [label="Step 6: 判定", fillcolor="#fef9e7"];
 
     pass [label="通过", fillcolor="#d5f5e3"];
     minor [label="小修", fillcolor="#fef9e7"];
     rewrite [label="重写", fillcolor="#fadbd8"];
     rollback [label="reject", fillcolor="#fadbd8"];
 
-    write [label="Step 5: 写入意见", fillcolor="#eaf2f8"];
-    deliver [label="Step 6: 交付确认", fillcolor="#d5f5e3"];
+    write [label="Step 7: 写入意见", fillcolor="#eaf2f8"];
+    deliver [label="Step 8: 交付确认", fillcolor="#d5f5e3"];
 
-    start -> read -> canon;
+    start -> read -> reader;
+    reader -> banned [label="通过"];
+    reader -> judge [label="严重问题"];
+    banned -> canon [label="通过"];
+    banned -> judge [label="未通过"];
     canon -> escalation [label="通过"];
     canon -> judge [label="未通过"];
     escalation -> judge;
     judge -> pass -> write -> deliver;
     judge -> minor -> write;
     judge -> rewrite -> write;
-    rewrite -> judge [label="重写后重审"];
+    rewrite -> reader [label="重写后重审"];
     judge -> rollback;
 }
 ```
@@ -81,7 +88,91 @@ digraph review {
 
 ---
 
-### Step 2: Canon 检查
+### Step 2: 读者视角重读
+
+**目标：** 以读者身份从头读一遍正文，发现"读起来不对"的问题。
+
+逐段扫描，问自己三个问题：
+
+#### 问题 1：有没有哪段删掉之后，读者不会注意到？
+
+- 不会断、不会漏 → 删掉。这段是废话
+- 会断或会漏 → 保留
+
+**什么算"废话"：**
+- 帮读者回忆刚刚发生的事（"虽然他付出了XX，但换来了YY"）
+- 重复上一章已经建立的信息（同一个设定在三章里解释了三次）
+- 没有画面、没有行动、没有新信息的感慨段落
+
+#### 问题 2：有没有哪个句子/段落和前几章重复了？
+
+- 用过 → 换一种。重复 = 偷懒 = 出戏
+- 没用过 → 通过
+
+**什么算"重复"：**
+- 相同的结尾句式（连续两章用同一句话收尾）
+- 相同的事件流程（第三章的冲突和第一章几乎一样）
+- 相同的情绪反应（每次遇到冲突都是同样的反应）
+- 相同的过渡方式（每次都用同一种方式切入新场景）
+
+#### 问题 3：如果我是读者，读到这里会不会走神？
+
+- 会想跳 → 这段太无聊了
+- 不会想跳 → 通过
+
+**什么让读者走神：**
+- 连续的日常流程描写（没有意外发生）
+- 连续的相似事件（过程几乎一样）
+- 没有信息量的对话（没有潜台词或性格展示）
+- 没有推进情节也没有建立角色的描写段落
+
+**判定逻辑：**
+- 发现少量问题（1-3 处） → 记录，进入 Step 3
+- 发现大量问题（4+ 处，或全章平淡无奇） → 🔄 rewrite_required
+- 发现致命问题（大段废话、严重重复、完全走神） → ⏪ reject
+
+---
+
+### Step 3: 禁用词兜底
+
+**目标：** 检查 guide.md 定义了但 AI 写的时候可能漏掉的规则。
+
+**检查项：**
+
+1. **禁用词扫描**（参照 guide.md 7.1 禁用词表）：
+   - 情绪/心理词（不禁、缓缓、微微、淡淡……）
+   - 连接/过渡词（然而、此外、与此同时……）
+   - 解释性短语（这意味着、也就是说……）
+   - 空洞修饰（仿佛、宛如、好似……）
+   - AI 式抒情/总结/反应
+   - 发现 → 🔧 小修（替换为具体画面或行动）
+
+2. **伪文学腔检测**（参照 guide.md 7.4）：
+   - 碎片化分行 → 🔄 rewrite_required
+   - 省略号泛滥（一段话超过 2 个） → 🔧 小修
+   - 连续 3 个以上单词语行 → 🔧 小修
+   - 全文超过 5% 为碎片化分行 → 🔄 rewrite_required
+
+3. **句式重复检测**（参照 guide.md 7.2）：
+   - 相同句式连续 >3 次 → 🔧 小修
+   - 相同段落结构连续 >3 次 → 🔧 小修
+   - 整章句式单一 → 🔄 rewrite_required
+
+4. **章末检查**（参照 guide.md 第八章）：
+   - 最后一段是抒情/总结/感慨/预告 → 🔧 小修
+   - 和上一章结尾模式相同 → 🔧 小修
+
+5. **数学/逻辑验算**：
+   - 涉及数字的内容（利息、比例、时间换算）有计算错误 → 🔧 小修
+
+**判定逻辑：**
+- 任一触发 rewrite → 直接 🔄 rewrite_required，跳过 Step 4-5
+- 任一触发小修 → 记录问题，继续 Step 4（小修问题累积到判定时一起处理）
+- 全部通过 → 进入 Step 4
+
+---
+
+### Step 4: Canon 检查
 
 **目标：** 确保 draft 没有引入未记录的设定，没有与已有设定冲突。
 
@@ -102,13 +193,12 @@ digraph review {
    - 违反 → ⏪ reject
 
 **判定逻辑：**
-- 任一触发 reject → 直接 ⏪ reject，跳过 Step 3
-- 任一触发小修 → 直接 🔧 小修，跳过 Step 3
-- 全部通过 → 进入 Step 3
+- 任一触发 reject → 直接 ⏪ reject，跳过 Step 5
+- 全部通过 → 进入 Step 5
 
 ---
 
-### Step 3: 升级感检查
+### Step 5: 升级感检查
 
 **目标：** 确保本章不是"正确但无聊"的流水账，和前几章相比有推进感。
 
@@ -129,11 +219,13 @@ digraph review {
 
 ---
 
-### Step 4: 判定
+### Step 6: 判定
+
+汇总 Step 2-5 的所有问题，给出最终判定。
 
 #### 通过
 
-所有检查通过。
+所有检查通过，无重大问题。
 
 #### 小修
 
@@ -145,7 +237,7 @@ digraph review {
 
 #### 重写
 
-核心问题太大，指出核心问题（1-2 个）+ 重写方向。重写后重新审查，最多 1 次。
+核心问题太大，指出核心问题（1-2 个）+ 重写方向。重写后从 Step 2 重新审查，最多 1 次。
 
 #### Reject
 
@@ -153,7 +245,7 @@ digraph review {
 
 ---
 
-### Step 5: 写入意见
+### Step 7: 写入意见
 
 在 `章节/chapter-xxx.md` 中更新「修改意见」section：
 
@@ -174,7 +266,7 @@ digraph review {
 
 ---
 
-### Step 6: 交付确认
+### Step 8: 交付确认
 
 用户确认后：
 1. 调用 `novel-update` 执行 canon 同步
@@ -188,7 +280,8 @@ digraph review {
 
 ## Key Principles
 
-- **只审 guide.md 覆盖不到的** — 结尾质量、句式重复、伪文学腔、节奏、情绪、记忆点由 guide.md 自检负责，review 不重复检查
+- **guide.md 管"怎么写"，review 管"写得怎么样"** — review 是唯一的质量闸门
+- **读者视角优先** — 先以读者身份感受，再对照规则检查
 - **Canon 是底线** — 新设定必须记录，冲突必须消除
 - **升级感是质量线** — 不能原地踏步，不能连续降级
 - **小修 1 轮，重写 1 次** — 不无限循环
@@ -198,7 +291,7 @@ digraph review {
 
 | 错误行为 | 正确做法 |
 |----------|----------|
-| 重复检查 guide.md 已覆盖的内容（结尾、句式、节奏） | 只审 Canon + 升级感 |
+| 跳过读者视角重读直接查规则 | 先"感受"再"检查" |
 | 小修要求改 5 处以上 | 只指出最值得改的 3 处 |
 | 小修后要求改第 2 轮 | 小修只改 1 轮 |
 | 重写 2 次还不通过还不回退 | 最多 1 次，不行就回退 |
@@ -228,3 +321,4 @@ digraph review {
 
 - **`shared/file-contracts.md`**：修改意见格式规范
 - **`shared/state-rules.md`**：状态流转规则
+- **`skills/novel-draft/templates/guide.md`**：禁用词表（7.1）、排版规则（7.4）、句式规则（7.2）、章末规则（第八章）
