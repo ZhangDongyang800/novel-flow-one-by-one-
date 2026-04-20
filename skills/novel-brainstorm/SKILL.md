@@ -10,10 +10,12 @@ description: |
 
 把散乱灵感收敛成一个能直接开工的 `project.md` 和 `人物/` 文件夹。不写大纲、不写正文、不造设定集——只做一件事：**把模糊想法压实到足够清晰**。
 
-核心方法论：**五维度渐进收束**。从碎片出发，每轮只聚焦一个维度，逐步把题材、主角、世界观、冲突、长篇机制五个维度压实，最终组装 `project.md`。
+核心方法论：**渐进收束**。从碎片出发，每轮只聚焦一个维度、只问一个问题，逐步把题材、主角、世界观、冲突、风格、驱动机制、字数、非目标八个维度压实，最终组装 `project.md`。
 
 <HARD-GATE>
-Do NOT invoke novel-outline, novel-draft, or any other novel skill until project.md has been written AND the user has approved it. This applies regardless of how clear the idea seems — a half-baked project.md will poison every downstream skill. Do NOT ask more than one question per turn. Every turn MUST contain exactly one question with 2-4 options, then STOP and wait for the user's answer.
+Do NOT invoke novel-outline, novel-draft, or any other novel skill until project.md has been written AND the user has approved it. This applies regardless of how clear the idea seems — a half-baked project.md will poison every downstream skill.
+
+**Every turn MUST contain exactly one question with 2-4 options, then STOP and wait for the user's answer.** Do NOT ask multiple questions in a single turn. Do NOT combine multiple dimensions into one question. Do NOT say "让我确认一下剩余的问题" and then list several questions at once. One question. Wait for answer. Then next question.
 </HARD-GATE>
 
 ## Anti-Pattern: "This Idea Is Clear Enough To Skip Brainstorm"
@@ -31,9 +33,12 @@ You MUST complete these items in order:
 3. **Protagonist** — lock down who, what they want, what they fear, name (with options)
 4. **World** — lock down world type and core rules (with options)
 5. **Conflict** — lock down core tension and escalation logic (with options)
-6. **Long-form mechanics** — lock down driving force, word count targets, non-goals (with options)
-7. **Assemble project.md** — fill every field, trace each to user-confirmed content
-8. **Deliver & confirm** — show project.md, get user approval, hand off to orchestrator
+6. **Writing style** — lock down text style (with options)
+7. **Long-form driver** — lock down what keeps readers reading (with options)
+8. **Word count** — lock down total and per-chapter targets (with options)
+9. **Non-goals** — lock down what NOT to write (with options)
+10. **Assemble project.md** — fill every field, trace each to user-confirmed content
+11. **Deliver & confirm** — show project.md, get user approval, hand off to orchestrator
 
 ---
 
@@ -51,12 +56,15 @@ digraph brainstorm {
     hero [label="Step 3: 主角", fillcolor="#eaf2f8"];
     world [label="Step 4: 世界观", fillcolor="#eaf2f8"];
     conflict [label="Step 5: 冲突", fillcolor="#eaf2f8"];
-    mechanism [label="Step 6: 长篇机制\n+ 字数规划", fillcolor="#eaf2f8"];
-    assemble [label="Step 7: 组装 project.md", fillcolor="#fef9e7"];
-    confirm [label="Step 8: 交付确认", shape=diamond, fillcolor="#fef9e7"];
+    style [label="Step 6: 写作风格", fillcolor="#eaf2f8"];
+    driver [label="Step 7: 长篇驱动", fillcolor="#eaf2f8"];
+    wordcount [label="Step 8: 字数规划", fillcolor="#eaf2f8"];
+    nongoals [label="Step 9: 非目标", fillcolor="#eaf2f8"];
+    assemble [label="Step 10: 组装 project.md", fillcolor="#fef9e7"];
+    confirm [label="Step 11: 交付确认", shape=diamond, fillcolor="#fef9e7"];
     handoff [label="交给 orchestrator", shape=doublecircle, fillcolor="#d5f5e3"];
 
-    start -> collect -> genre -> hero -> world -> conflict -> mechanism -> assemble -> confirm;
+    start -> collect -> genre -> hero -> world -> conflict -> style -> driver -> wordcount -> nongoals -> assemble -> confirm;
     confirm -> handoff [label="用户确认"];
     confirm -> assemble [label="打回（≤2次）"];
 }
@@ -174,7 +182,7 @@ digraph brainstorm {
 
 ---
 
-### Step 5.5: 写作风格
+### Step 6: 写作风格
 
 **目标：** 锁定"文字应该是什么感觉"。
 
@@ -190,36 +198,59 @@ digraph brainstorm {
 
 ---
 
-### Step 6: 长篇机制 + 字数规划
+### Step 7: 长篇驱动机制
 
-**目标：** 确认"为什么能撑起长篇"和"写多长"。
+**目标：** 确认"为什么能撑起长篇"。
 
-- 长篇驱动机制，**附带选项**
+- 提出关于长篇驱动机制的**一个**问题，**附带 2-4 个选项**
   - 示例："故事靠什么吸引读者一直读下去？"
     - A. 角色成长弧光
     - B. 事件链条（悬念和反转）
     - C. 世界观探索
     - D. 人物关系
     - E. 其他
-- 全书目标字数，**附带选项**
-  - A. 15-30 万字
-  - B. 50-80 万字
-  - C. 80-150 万字
-  - D. 150 万字以上
-  - E. 其他
-- 每章字数默认 2300 字左右（写在 project.md 模板中），如需修改可直接编辑 project.md
-- 明确"非目标"——不打算写什么，**附带选项供勾选**
-  - A. 感情线/恋爱戏份
-  - B. 详细战斗/动作场面
-  - C. 政治权谋博弈
-  - D. 大段世界观说明
-  - E. 其他
+- **问完这个问题后，STOP。等待用户回答。不要继续问其他问题。**
 
-**验证点：** 驱动机制、字数规划、非目标已确认。
+**验证点：** 驱动机制已确认。
 
 ---
 
-### Step 7: 组装 project.md
+### Step 8: 字数规划
+
+**目标：** 确认"写多长"。
+
+- 提出关于字数的**一个**问题，**附带 2-4 个选项**
+  - 示例："全书大概写多长？"
+    - A. 15-30 万字
+    - B. 50-80 万字
+    - C. 80-150 万字
+    - D. 150 万字以上
+    - E. 其他
+- 每章字数默认 2300 字左右（写在 project.md 模板中），如需修改可直接编辑 project.md
+- **问完这个问题后，STOP。等待用户回答。不要继续问其他问题。**
+
+**验证点：** 字数规划已确认。
+
+---
+
+### Step 9: 非目标
+
+**目标：** 确认"不打算写什么"。
+
+- 提出关于非目标的**一个**问题，**附带 2-4 个选项（可多选）**
+  - 示例："以下哪些内容你不想写？（可多选）"
+    - A. 感情线/恋爱戏份
+    - B. 详细战斗/动作场面
+    - C. 政治权谋博弈
+    - D. 大段世界观说明
+    - E. 其他
+- **问完这个问题后，STOP。等待用户回答。不要继续问其他问题。**
+
+**验证点：** 非目标已确认。
+
+---
+
+### Step 10: 组装 project.md
 
 **目标：** 将所有收束结果组装为 `project.md`。
 
@@ -269,7 +300,7 @@ digraph brainstorm {
 
 ---
 
-### Step 8: 交付确认
+### Step 11: 交付确认
 
 **目标：** 确保产出可以无缝交给 orchestrator。
 
@@ -296,9 +327,11 @@ digraph brainstorm {
 
 | 错误行为 | 正确做法 |
 |----------|----------|
-| 一次抛出 3-5 个问题让用户回答 | 每轮只问一个问题，等回答后再问下一个 |
+| 一次抛出 2-3 个问题让用户回答 | 每轮只问一个问题，等回答后再问下一个 |
+| 把多个维度塞在一个 Step 里（如"字数+非目标"一起问） | 每个维度一个独立 Step，每个 Step 只问一个问题 |
+| 说"让我确认一下剩余的问题"然后列出多个问题 | 永远不要说"剩余的问题"，一次只问一个 |
 | 用户说"随便"就自行选择题材/风格 | 追问具体场景或提供选项让用户二选一 |
-| 听完描述直接写 project.md | 先完成五维度收束，再组装 project.md |
+| 听完描述直接写 project.md | 先完成所有维度的收束，再组装 project.md |
 | 在 brainstorm 阶段设计具体情节或章节 | 只收束到"种子"级别，具体情节留给 outline |
 | 跳过"非目标"字段 | 非目标是防止范围蔓延的关键护栏 |
 | 给出的选项太抽象（如"热血""温馨"） | 选项要具体、有区分度、带简短说明 |

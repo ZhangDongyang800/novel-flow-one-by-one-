@@ -30,7 +30,7 @@ You MUST complete these items in order:
 
 1. **Scan project files** — check existence of project.md, outline.md, chapter files, project-state.md; build a file-fact snapshot
 2. **Conflict detection** — resolve inconsistencies between frontmatter, outline status, and project-state.md using priority rules
-3. **Judge current state** — determine status (6 values) and stage (4 values) based on resolved file facts
+3. **Judge current state** — determine status (6 values) and stage (5 values) based on resolved file facts
 4. **Select current chapter** — pick the correct chapter using priority rules, enforce no-skip rule
 5. **Route to skill** — output routing decision to the correct sub-skill
 6. **Handle blocked** — if blocked_reason is non-empty, follow blocked recovery flow

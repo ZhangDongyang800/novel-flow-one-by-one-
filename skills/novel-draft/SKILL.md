@@ -76,7 +76,7 @@ digraph draft {
     next [label="规划下一个场景"];
     finish [label="全章收尾"];
     check2 [label="Stage 3: 自查\n字数 + 连贯性", fillcolor="#eaf2f8"];
-    handoff [label="→ 交给 orchestrator", fillcolor="#d5f5e3"];
+    handoff [label="Stage 4: 交给 orchestrator", fillcolor="#d5f5e3"];
 
     start -> read -> stage2;
     stage2 -> scene -> think -> check;
